@@ -17,4 +17,7 @@ b   c
 d d d d
 ```
 
+## Alternatives
+* https://gist.github.com/AndersDJohnson/c81a62266457bb307e29
+
 [brace expansion]: https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html
