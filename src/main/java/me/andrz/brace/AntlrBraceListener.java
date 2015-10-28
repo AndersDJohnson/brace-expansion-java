@@ -13,7 +13,8 @@ import java.util.*;
  */
 public class AntlrBraceListener extends BraceExpansionBaseListener {
 
-    private Deque<List<StringBuffer>> stack = new ArrayDeque<List<StringBuffer>>();
+    private Deque<List<StringBuffer>> braces = new ArrayDeque<List<StringBuffer>>();
+    private Deque<List<StringBuffer>> commas = new ArrayDeque<List<StringBuffer>>();
 
     private Value<List<String>> value;
 
@@ -23,45 +24,61 @@ public class AntlrBraceListener extends BraceExpansionBaseListener {
 
     @Override public void enterStr(BraceExpansionParser.StrContext ctx) {
         String s = ctx.getText();
-        append(s);
+        if (s == null || s.length() == 0) return;
+        List<StringBuffer> comma = commas.pollFirst();
+        List<StringBuffer> newComma = new ArrayList<StringBuffer>();
+        for (StringBuffer c : comma) {
+            newComma.add(new StringBuffer(c.toString() + s));
+        }
+        commas.offerFirst(newComma);
     }
     @Override public void exitStr(BraceExpansionParser.StrContext ctx) { }
 
     @Override public void enterSub(BraceExpansionParser.SubContext ctx) {
-        String text = ctx.getText();
-        List<StringBuffer> strings = stack.peekFirst();
-        strings.add(new StringBuffer(text));
+        List<StringBuffer> comma = new ArrayList<StringBuffer>();
+        comma.add(new StringBuffer(""));
+        commas.offerFirst(comma);
     }
     @Override public void exitSub(BraceExpansionParser.SubContext ctx) {
+        List<StringBuffer> brace = braces.peekFirst();
+        List<StringBuffer> comma = commas.pollFirst();
+        brace.addAll(comma);
     }
 
     @Override public void enterOt(BraceExpansionParser.OtContext ctx) {
         String s = ctx.getText();
-        ott(s);
+        List<StringBuffer> comma = commas.peekFirst();
+        for (StringBuffer c : comma) {
+            c.append(s);
+        }
     }
     @Override public void exitOt(BraceExpansionParser.OtContext ctx) { }
 
     @Override public void enterRoot(BraceExpansionParser.RootContext ctx) {
-        List<StringBuffer> layer = new ArrayList<StringBuffer>();
-        layer.add(new StringBuffer(""));
-        stack.offerFirst(layer);
+        List<StringBuffer> comma = new ArrayList<StringBuffer>();
+        comma.add(new StringBuffer(""));
+        commas.offerFirst(comma);
     }
     @Override public void exitRoot(BraceExpansionParser.RootContext ctx) {
-        List<StringBuffer> strings = stack.peekFirst();
-        List<String> strs = new ArrayList<String>();
-        for (StringBuffer sb : strings) {
-            strs.add(sb.toString());
-        }
-        value.setValue(strs);
+        List<StringBuffer> comma = commas.peekFirst();
+        List<String> strings = stringBuffersToStrings(comma);
+        value.setValue(strings);
     }
 
     @Override public void enterBrace(BraceExpansionParser.BraceContext ctx) {
-        List<StringBuffer> layer = new ArrayList<StringBuffer>();
-        stack.offerFirst(layer);
+        List<StringBuffer> list = new ArrayList<StringBuffer>();
+        braces.offerFirst(list);
     }
     @Override public void exitBrace(BraceExpansionParser.BraceContext ctx) {
-        List<StringBuffer> head = stack.pollFirst();
-        append(head);
+        List<StringBuffer> brace = braces.pollFirst();
+        List<StringBuffer> comma = commas.pollFirst();
+        List<StringBuffer> newComma = new ArrayList<StringBuffer>();
+        for (StringBuffer b : brace) {
+            for (StringBuffer c : comma) {
+                newComma.add(new StringBuffer(c.toString() + b.toString()));
+            }
+        }
+        commas.offerFirst(newComma);
     }
 
     @Override public void enterEveryRule(ParserRuleContext ctx) { }
@@ -69,34 +86,12 @@ public class AntlrBraceListener extends BraceExpansionBaseListener {
     @Override public void visitTerminal(TerminalNode node) { }
     @Override public void visitErrorNode(ErrorNode node) { }
 
-    private void ott(String s) {
-        List<StringBuffer> newStrings = new ArrayList<StringBuffer>();
-        List<StringBuffer> strings = stack.pollFirst();
-        for (StringBuffer sb : strings) {
-            newStrings.add(new StringBuffer(sb.toString() + s));
+    public List<String> stringBuffersToStrings(List<StringBuffer> sbs) {
+        List<String> sts = new ArrayList<String>();
+        for (StringBuffer sb : sbs) {
+            sts.add(sb.toString());
         }
-        stack.offerFirst(newStrings);
-    }
-
-    private void append(List<StringBuffer> next) {
-        if (next.size() < 2) {
-            return;
-        }
-        List<StringBuffer> newStrings = new ArrayList<StringBuffer>();
-        List<StringBuffer> strings = stack.pollFirst();
-        for (StringBuffer sb : next) {
-            for (StringBuffer s : strings) {
-                newStrings.add(new StringBuffer(s.toString() + sb.toString()));
-            }
-        }
-        stack.offerFirst(newStrings);
-    }
-
-    private void append(StringBuffer sb) {
-        append(Arrays.asList(sb));
-    }
-    private void append(String s) {
-        append(new StringBuffer(s));
+        return sts;
     }
 
 }

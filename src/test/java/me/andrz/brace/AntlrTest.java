@@ -7,10 +7,8 @@ import me.andrz.brace.antlr.BraceExpansionLexer;
 import me.andrz.brace.antlr.BraceExpansionParser;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,11 +31,12 @@ public class AntlrTest {
             "{b,B}c",
             "a{b,B}c",
             "a{b,B}c,d",
+            "a{b,B{c,C}D{e,E}F,g}h",
             "x,ya{b,{1\\,2,3}B}c,d",
             "x,ya{bb,AA{1,2,33}{4,5}BB}cc,dd",
     };
 
-    @Ignore
+//    @Ignore
     @Test
     public void testLexer() {
         for (String s : strings) {
@@ -60,13 +59,30 @@ public class AntlrTest {
         }
     }
 
-//        String str = "x,ya{bb,AA{1\\,2,33}{4,5}BB}cc,dd";
-//        String str = "x,ya{bb,AA{1,2,33}{4,5}BB}cc,dd";
-
     @Test
     public void testEmpty() {
         assertExpand(
                 "",
+                Arrays.asList(
+                        ""
+                )
+        );
+    }
+
+    @Test
+    public void testEmptyBrace() {
+        assertExpand(
+                "{}",
+                Arrays.asList(
+                        ""
+                )
+        );
+    }
+
+    @Test
+    public void testEmptyBraces() {
+        assertExpand(
+                "{}{{}}{}",
                 Arrays.asList(
                         ""
                 )
@@ -80,6 +96,46 @@ public class AntlrTest {
                 Arrays.asList(
                         "a"
                 )
+        );
+    }
+
+    @Test
+    public void testOuterCommas() {
+        assertExpand(
+                ",a,b,",
+                Arrays.asList(
+                        ",a,b,"
+                )
+        );
+    }
+
+    @Test
+    public void testEmptyCommas() {
+        assertExpand(
+                "{a,b{,}}{,,}",
+                Arrays.asList(
+                        "a",
+                        "b",
+                        "b",
+                        "a",
+                        "b",
+                        "b",
+                        "a",
+                        "b",
+                        "b"
+                )
+                // TODO: Should we do this order instead, like zsh?
+//                Arrays.asList(
+//                        "a",
+//                        "a",
+//                        "a",
+//                        "b",
+//                        "b",
+//                        "b",
+//                        "b",
+//                        "b",
+//                        "b"
+//                )
         );
     }
 
@@ -129,6 +185,36 @@ public class AntlrTest {
                     "abdfg",
                     "acdfg"
             )
+        );
+    }
+
+    @Test
+    public void test22s() {
+        assertExpand(
+                "a{b{c,d}e,fg}h",
+                Arrays.asList(
+                        "abceh",
+                        "abdeh",
+                        "afgh"
+                )
+        );
+    }
+
+//        String str = "x,ya{bb,AA{1,2,33}{4,5}BB}cc,dd";
+
+    @Test
+    public void testLong() {
+        assertExpand(
+                "x,ya{bb,AA{1\\\\,2,33}{4,5}BB}cc,dd",
+                Arrays.asList(
+                        "x,yabbcc,dd",
+                        "x,yaAA1\\\\4BBcc,dd",
+                        "x,yaAA24BBcc,dd",
+                        "x,yaAA334BBcc,dd",
+                        "x,yaAA1\\\\5BBcc,dd",
+                        "x,yaAA25BBcc,dd",
+                        "x,yaAA335BBcc,dd"
+                )
         );
     }
 
