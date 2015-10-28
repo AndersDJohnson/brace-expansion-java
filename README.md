@@ -5,8 +5,8 @@
 * Brace nesting.
 * Ranges
   * Both integers and characters including Unicode.
-  * Increment forwards or in reverse.
-  * Optional explicit increments, positive or negative.
+  * Increment ascending or descending.
+  * Optional explicit increment values, positive or negative.
 
 ## TODO
 * Zero padded number expansion.
