@@ -18,9 +18,9 @@ d d d
 
 ## References
 
-* https://github.com/antlr/grammars-v4
-* http://wiki.bash-hackers.org/syntax/expansion/brace
 * https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html
+* http://wiki.bash-hackers.org/syntax/expansion/brace
+* https://github.com/antlr/grammars-v4
 
 ## Alternatives
 
