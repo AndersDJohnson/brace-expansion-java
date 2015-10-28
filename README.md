@@ -16,6 +16,7 @@
 For example:
 
 ```java
+import me.andrz.brace.BraceExpansion;
 List<String> strs = BraceExpansion.expand("pic{{,s},ture{,s}}-{0..2}.{jpg,png}");
 ```
 
