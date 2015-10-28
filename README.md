@@ -17,7 +17,7 @@ b c
 d d d d
 ```
 
-This project provides an ANTLR 4 grammar, [BraceExpansion.g4][].
+This project provides an [ANTLR][] 4 grammar, [BraceExpansion.g4][].
 
 ## References
 
@@ -31,3 +31,4 @@ This project provides an ANTLR 4 grammar, [BraceExpansion.g4][].
 
 [brace expansion]: https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html
 [BraceExpansion.g4]: src/main/antlr/me/andrz/brace/antlr/BraceExpansion.g4
+[antlr]: http://www.antlr.org/
