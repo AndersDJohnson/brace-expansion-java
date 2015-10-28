@@ -25,6 +25,7 @@ public class AntlrBraceListener extends BraceExpansionBaseListener {
     @Override public void enterStr(BraceExpansionParser.StrContext ctx) {
         String s = ctx.getText();
         if (s == null || s.length() == 0) return;
+        s = unescape(s);
         List<StringBuffer> comma = commas.pollFirst();
         List<StringBuffer> newComma = new ArrayList<StringBuffer>();
         for (StringBuffer c : comma) {
@@ -47,6 +48,7 @@ public class AntlrBraceListener extends BraceExpansionBaseListener {
 
     @Override public void enterOt(BraceExpansionParser.OtContext ctx) {
         String s = ctx.getText();
+        s = unescape(s);
         List<StringBuffer> comma = commas.peekFirst();
         for (StringBuffer c : comma) {
             c.append(s);
@@ -92,6 +94,12 @@ public class AntlrBraceListener extends BraceExpansionBaseListener {
             sts.add(sb.toString());
         }
         return sts;
+    }
+
+    public String unescape(String s) {
+        s = s.replaceAll("\\\\([^\\\\])", "$1");
+        s = s.replaceAll("\\\\\\\\", "\\\\");
+        return s;
     }
 
 }

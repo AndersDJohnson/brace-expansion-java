@@ -9,15 +9,17 @@
 grammar BraceExpansion;
 
 root : ot ( brace ot )* ;
-ot: (T|CM)* ;
+ot: ( ESC | CM | T )* ;
 
 brace : LB sub ( CM sub )* RB ;
 
 sub : str ( brace str )* ;
 
-str: T* ;
+str: ( ESC | T )* ;
 
-T : ~[{},]+ ;
+ESC: '\\\\' | '\\' . ;
+
+T : ~[{},\\]+ ;
 LB : '{' ;
 RB : '}' ;
 CM : ',' ;

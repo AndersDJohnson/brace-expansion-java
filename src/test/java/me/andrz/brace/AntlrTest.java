@@ -30,6 +30,8 @@ public class AntlrTest {
             "a{b,B}",
             "{b,B}c",
             "a{b,B}c",
+            "a\\{b,c\\}d",
+            "a{b\\,c}d",
             "a{b,B}c,d",
             "a{b,B{c,C}D{e,E}F,g}h",
             "x,ya{b,{1\\,2,3}B}c,d",
@@ -100,6 +102,16 @@ public class AntlrTest {
     }
 
     @Test
+    public void testEscapes() {
+        assertExpand(
+                "a\\\\a\\\\\\a",
+                Arrays.asList(
+                        "a\\a\\a"
+                )
+        );
+    }
+
+    @Test
     public void testOuterCommas() {
         assertExpand(
                 ",a,b,",
@@ -146,6 +158,26 @@ public class AntlrTest {
                 Arrays.asList(
                         "abd",
                         "acd"
+                )
+        );
+    }
+
+    @Test
+    public void testEscapeBrace() {
+        assertExpand(
+                "a\\{b,c\\}d",
+                Arrays.asList(
+                        "a{b,c}d"
+                )
+        );
+    }
+
+    @Test
+    public void testEscapeComma() {
+        assertExpand(
+                "a{b\\,c}d",
+                Arrays.asList(
+                        "ab,cd"
                 )
         );
     }
@@ -208,10 +240,10 @@ public class AntlrTest {
                 "x,ya{bb,AA{1\\\\,2,33}{4,5}BB}cc,dd",
                 Arrays.asList(
                         "x,yabbcc,dd",
-                        "x,yaAA1\\\\4BBcc,dd",
+                        "x,yaAA1\\4BBcc,dd",
                         "x,yaAA24BBcc,dd",
                         "x,yaAA334BBcc,dd",
-                        "x,yaAA1\\\\5BBcc,dd",
+                        "x,yaAA1\\5BBcc,dd",
                         "x,yaAA25BBcc,dd",
                         "x,yaAA335BBcc,dd"
                 )
