@@ -40,7 +40,7 @@ public class AntlrTest {
     @Test
     public void testLexer() {
         for (String s : strings) {
-            System.out.println("STRING: \"" + s + "\"");
+//            System.out.println("STRING: \"" + s + "\"");
 
             BraceExpansionLexer lexer = new BraceExpansionLexer(new ANTLRInputStream(s));
 
@@ -53,9 +53,9 @@ public class AntlrTest {
             // Specify our entry point
             ParserRuleContext context = parser.root();
 
-            System.out.println("TEXT: " + context.getText());
+//            System.out.println("TEXT: " + context.getText());
 
-            System.out.println("TREE: " + context.toStringTree(parser));
+//            System.out.println("TREE: " + context.toStringTree(parser));
         }
     }
 
@@ -219,9 +219,7 @@ public class AntlrTest {
     }
 
     public void assertExpand(String s, List<String> exs) {
-        System.out.println(s);
         List<String> strs = BraceExpansion.expand(s);
-        System.out.println(strs);
         MatcherAssert.assertThat(strs, Matchers.equalTo(exs));
     }
 }

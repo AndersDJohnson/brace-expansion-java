@@ -32,8 +32,6 @@ public class BraceExpansion {
         // Specify our entry point
         BraceExpansionParser.RootContext context = parser.root();
 
-        System.out.println("TREE: " + context.toStringTree(parser));
-
         // Walk it and attach our listener
         ParseTreeWalker walker = new ParseTreeWalker();
         Value<List<String>> value = new Value<List<String>>();
