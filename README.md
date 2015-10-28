@@ -5,16 +5,15 @@
 a{b,c{0,1}}d
 
 // list
-a b 0 d
-a b 1 d
+a b d
 a c 0 d
 a c 1 d
 
 // tree
 a
-b   c
-0 1 0 1
-d d d d
+b c
+  0 1
+d d d
 ```
 
 ## References
