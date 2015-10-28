@@ -2,18 +2,19 @@
 [Brace expansion] from Bash/shell in Java.
 
 ```
-a{b,c{0,1}}d
+a{b,c{0..2}}d
 
 // list
 a b d
 a c 0 d
 a c 1 d
+a c 2 d
 
 // tree
 a
 b c
-  0 1
-d d d
+  0 1 2
+d d d d
 ```
 
 ## References
