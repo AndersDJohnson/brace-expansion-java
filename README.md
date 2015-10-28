@@ -1,6 +1,15 @@
 # brace-expansion
 [Brace expansion] from Bash/shell in Java.
 
+## Features
+* Brace nesting.
+* Ranges
+  * Both integers and characters including Unicode.
+  * Optional explicit increments, positive or negative.
+
+## TODO
+* Zero padded number expansion.
+
 ## Use
 
 For example:
