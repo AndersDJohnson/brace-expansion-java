@@ -30,6 +30,11 @@ public class AntlrTest {
             "a{b,B}",
             "{b,B}c",
             "a{b,B}c",
+            "a{1..3}b",
+            "a{1..4..2}b",
+            "a{4..1..-2}b",
+            "a{a..d..2}b",
+            "a{d..a..-2}b",
             "a\\{b,c\\}d",
             "a{b\\,c}d",
             "a{b,B}c,d",
@@ -56,7 +61,6 @@ public class AntlrTest {
             ParserRuleContext context = parser.root();
 
 //            System.out.println("TEXT: " + context.getText());
-
 //            System.out.println("TREE: " + context.toStringTree(parser));
         }
     }
@@ -67,6 +71,160 @@ public class AntlrTest {
                 "",
                 Arrays.asList(
                         ""
+                )
+        );
+    }
+
+    @Test
+    public void testRangeInt() {
+        assertExpand(
+                "a{1..3}b",
+                Arrays.asList(
+                        "a1b",
+                        "a2b",
+                        "a3b"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeIntReverse() {
+        assertExpand(
+                "a{3..1}b",
+                Arrays.asList(
+                        "a3b",
+                        "a2b",
+                        "a1b"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeIntIncr() {
+        assertExpand(
+                "a{1..4..2}b",
+                Arrays.asList(
+                        "a1b",
+                        "a3b"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeIntIncrReverse() {
+        assertExpand(
+                "a{4..1..-2}b",
+                Arrays.asList(
+                        "a4b",
+                        "a2b"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeIntIncrInfNeg() {
+        assertExpand(
+                "a{1..4..-2}e",
+                Arrays.asList(
+                        "a{1..4..-2}e"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeIntIncrInfZero() {
+        assertExpand(
+                "a{1..3..0}e",
+                Arrays.asList(
+                        "a{1..3..0}e"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeIntIncrInfNegZero() {
+        assertExpand(
+                "a{1..3..-0}e",
+                Arrays.asList(
+                        "a{1..3..-0}e"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeIntIncrInfPos() {
+        assertExpand(
+                "a{4..1..2}e",
+                Arrays.asList(
+                        "a{4..1..2}e"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeChar() {
+        assertExpand(
+                "a{b..d}e",
+                Arrays.asList(
+                        "abe",
+                        "ace",
+                        "ade"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeCharReverse() {
+        assertExpand(
+                "a{d..b}e",
+                Arrays.asList(
+                        "ade",
+                        "ace",
+                        "abe"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeCharIncr() {
+        assertExpand(
+                "a{b..f..2}e",
+                Arrays.asList(
+                        "abe",
+                        "ade",
+                        "afe"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeCharIncrReverse() {
+        assertExpand(
+                "a{f..b..-2}e",
+                Arrays.asList(
+                        "afe",
+                        "ade",
+                        "abe"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeCharIncrInfNeg() {
+        assertExpand(
+                "a{b..f..-2}e",
+                Arrays.asList(
+                        "a{b..f..-2}e"
+                )
+        );
+    }
+
+    @Test
+    public void testRangeCharIncrInfPos() {
+        assertExpand(
+                "a{f..b..2}e",
+                Arrays.asList(
+                        "a{f..b..2}e"
                 )
         );
     }

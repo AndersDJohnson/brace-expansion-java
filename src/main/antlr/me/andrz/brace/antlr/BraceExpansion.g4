@@ -9,17 +9,28 @@
 grammar BraceExpansion;
 
 root : ot ( brace ot )* ;
-ot: ( ESC | CM | T )* ;
+ot : ( ESC | CM | H | D | T )* ;
+str : ( ESC | H | D | T )* ;
 
-brace : LB sub ( CM sub )* RB ;
+brace :
+      rangeNum
+    | rangeChar
+    | LB sub ( CM sub )* RB
+    ;
 
 sub : str ( brace str )* ;
 
-str: ( ESC | T )* ;
+rangeNum : integer '..' integer ( '..' integer )? ;
+
+rangeChar : T '..' T ( '..' integer )? ;
+
+integer : H? D+ ;
 
 ESC: '\\\\' | '\\' . ;
 
-T : ~[{},\\] ;
+T : ~[{},\\0-9\-] ;
 LB : '{' ;
 RB : '}' ;
 CM : ',' ;
+D : [0-9] ;
+H : '-' ;

@@ -4,6 +4,7 @@ import me.andrz.brace.antlr.BraceExpansionBaseListener;
 import me.andrz.brace.antlr.BraceExpansionParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.*;
@@ -83,10 +84,55 @@ public class AntlrBraceListener extends BraceExpansionBaseListener {
         commas.offerFirst(newComma);
     }
 
+    @Override public void enterRangeNum(BraceExpansionParser.RangeNumContext ctx) {
+        ParseTree child;
+        child = ctx.getChild(0);
+        Integer start = child == null ? null : Integer.valueOf(child.getText());
+        child = ctx.getChild(2);
+        Integer end = child == null ? null : Integer.valueOf(child.getText());
+        child = ctx.getChild(4);
+        Integer incr = child == null ? null : Integer.valueOf(child.getText());
+
+        Incrementor<Integer> incrementor = new IntegerIncrementor(start, end, incr);
+        incrementing(ctx.getText(), incrementor);
+    }
+    @Override public void exitRangeNum(BraceExpansionParser.RangeNumContext ctx) { }
+
+    @Override public void enterRangeChar(BraceExpansionParser.RangeCharContext ctx) {
+        ParseTree child;
+        child = ctx.getChild(0);
+        Character start = child == null ? null : child.getText().charAt(0);
+        child = ctx.getChild(2);
+        Character end = child == null ? null : child.getText().charAt(0);
+        child = ctx.getChild(4);
+        Integer incr = child == null ? null : Integer.valueOf(child.getText());
+
+        Incrementor<Character> incrementor = new CharacterIncrementor(start, end, incr);
+        incrementing(ctx.getText(), incrementor);
+    }
+    @Override public void exitRangeChar(BraceExpansionParser.RangeCharContext ctx) { }
+
     @Override public void enterEveryRule(ParserRuleContext ctx) { }
     @Override public void exitEveryRule(ParserRuleContext ctx) { }
     @Override public void visitTerminal(TerminalNode node) { }
     @Override public void visitErrorNode(ErrorNode node) { }
+
+    public void incrementing(String s, Incrementor incrementor) {
+        List<StringBuffer> brace = braces.peekFirst();
+
+        String error = incrementor.valid();
+        if (error != null) {
+            s = "{" + s + "}"; // re-wrap
+            s = unescape(s);
+            brace.add(new StringBuffer(s));
+        }
+        List<StringBuffer> comma = new ArrayList<StringBuffer>();
+        while (incrementor.hasNext()) {
+            comma.add(new StringBuffer(incrementor.getStart().toString()));
+            incrementor.next();
+        }
+        brace.addAll(comma);
+    }
 
     public List<String> stringBuffersToStrings(List<StringBuffer> sbs) {
         List<String> sts = new ArrayList<String>();
