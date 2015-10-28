@@ -5,7 +5,7 @@
 
 For example:
 
-```
+```java
 List<String> strs = BraceExpansion.expand("pic{{,s},ture{,s}}-{0..2}.{jpg,png}");
 ```
 
