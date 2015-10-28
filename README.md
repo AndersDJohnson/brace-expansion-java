@@ -5,6 +5,7 @@
 * Brace nesting.
 * Ranges
   * Both integers and characters including Unicode.
+  * Increment forwards or in reverse.
   * Optional explicit increments, positive or negative.
 
 ## TODO
