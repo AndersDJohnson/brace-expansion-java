@@ -1,5 +1,5 @@
 # brace-expansion
-[Brace expansion] from sh/bash in Java.
+[Brace expansion] from Bash/shell in Java.
 
 ```
 a{b,c{0,1}}d
