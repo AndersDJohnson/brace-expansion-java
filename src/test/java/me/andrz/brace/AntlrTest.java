@@ -408,6 +408,39 @@ public class AntlrTest {
         );
     }
 
+    @Test
+    public void testReal() {
+        assertExpand(
+                "pic{{,s},ture{,s}}-{0..2}.{jpg,png}",
+                Arrays.asList(
+                        "pic-0.jpg",
+                        "pics-0.jpg",
+                        "picture-0.jpg",
+                        "pictures-0.jpg",
+                        "pic-1.jpg",
+                        "pics-1.jpg",
+                        "picture-1.jpg",
+                        "pictures-1.jpg",
+                        "pic-2.jpg",
+                        "pics-2.jpg",
+                        "picture-2.jpg",
+                        "pictures-2.jpg",
+                        "pic-0.png",
+                        "pics-0.png",
+                        "picture-0.png",
+                        "pictures-0.png",
+                        "pic-1.png",
+                        "pics-1.png",
+                        "picture-1.png",
+                        "pictures-1.png",
+                        "pic-2.png",
+                        "pics-2.png",
+                        "picture-2.png",
+                        "pictures-2.png"
+                )
+        );
+    }
+
     public void assertExpand(String s, List<String> exs) {
         List<String> strs = BraceExpansion.expand(s);
         MatcherAssert.assertThat(strs, Matchers.equalTo(exs));
