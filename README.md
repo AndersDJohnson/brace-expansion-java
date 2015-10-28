@@ -1,4 +1,4 @@
-# BraceExpansion
+# brace-expansion
 [Brace expansion] from sh/bash in Java.
 
 ```
