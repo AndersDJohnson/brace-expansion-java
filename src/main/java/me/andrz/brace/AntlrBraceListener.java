@@ -125,6 +125,7 @@ public class AntlrBraceListener extends BraceExpansionBaseListener {
             s = "{" + s + "}"; // re-wrap
             s = unescape(s);
             brace.add(new StringBuffer(s));
+            return;
         }
         List<StringBuffer> comma = new ArrayList<StringBuffer>();
         while (incrementor.hasNext()) {
