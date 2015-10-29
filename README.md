@@ -1,5 +1,6 @@
 # brace-expansion
 
+[![Build Status](https://travis-ci.org/AndersDJohnson/brace-expansion-java.png)](https://travis-ci.org/AndersDJohnson/brace-expansion-java)
 [![Download](https://api.bintray.com/packages/AndersDJohnson/maven/brace-expansion/images/download.svg) ][download]
 
 [Brace expansion] from Bash/shell in Java.
