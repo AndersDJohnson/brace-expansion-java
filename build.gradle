@@ -26,6 +26,9 @@ ext.antlr = [
         destinationDir: "src/generated-sources/java"
 ]
 
+// So CI build doesn't fail, but add to "$GRADLE_USER_HOME/gradle.properties"
+ext['bintray.key'] = null
+
 repositories {
     mavenCentral()
 }
@@ -55,7 +58,6 @@ task wrapper(type: Wrapper) {
  */
 bintray {
     user = 'AndersDJohnson'
-    // Add to "$GRADLE_USER_HOME/gradle.properties"
     key = project.property('bintray.key')
     pkg {
         repo = 'maven'
