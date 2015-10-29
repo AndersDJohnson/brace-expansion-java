@@ -7,7 +7,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'idea'
 //apply from: file('gradle/idea.gradle')
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.6
 group = 'me.andrz'
 version = '1.0.0'
 description = 'Brace expansion from Bash/shell in Java.'
