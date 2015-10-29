@@ -1,4 +1,7 @@
 # brace-expansion
+
+[![Download](https://api.bintray.com/packages/AndersDJohnson/maven/brace-expansion/images/download.svg) ][download]
+
 [Brace expansion] from Bash/shell in Java.
 
 ## Features
@@ -52,6 +55,50 @@ pictures-2.png
 
 This project provides an [ANTLR][] 4 grammar, [BraceExpansion.g4][].
 
+
+## Install
+
+### Maven
+
+```xml
+<repositories>
+    <repository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>bintray-AndersDJohnson-maven</id>
+        <name>bintray-AndersDJohnson-maven</name>
+        <url>http://dl.bintray.com/AndersDJohnson/maven</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>me.andrz</groupId>
+        <artifactId>brace-expansion</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+### Gradle
+
+```gradle
+repositories {
+    maven {
+        url  "http://dl.bintray.com/AndersDJohnson/maven" 
+    }
+}
+
+dependencies {
+    compile 'me.andrz:brace-expansion:1.0.0'
+}
+```
+
+### Manual
+
+[Download JAR from BinTray][download].
+
 ## References
 
 * https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html
@@ -65,3 +112,4 @@ This project provides an [ANTLR][] 4 grammar, [BraceExpansion.g4][].
 [brace expansion]: https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html
 [BraceExpansion.g4]: src/main/antlr/me/andrz/brace/antlr/BraceExpansion.g4
 [antlr]: http://www.antlr.org/
+[download]: https://bintray.com/artifact/download/AndersDJohnson/maven/me/andrz/brace-expansion/1.0.0/brace-expansion-1.0.0.jar
