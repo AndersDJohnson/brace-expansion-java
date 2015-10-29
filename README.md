@@ -8,9 +8,9 @@
 ## Features
 * Brace nesting.
 * Ranges
-  * Both integers and characters including Unicode.
-  * Increment ascending or descending (decrement).
-  * Optional explicit increment values, positive or negative.
+  * Both integers and characters, including Unicode.
+  * Increment ascending or descending.
+  * Optional explicit increment step values, positive or negative.
 
 ## TODO
 * Zero padded number expansion.
