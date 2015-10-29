@@ -1,5 +1,9 @@
-description = "ANTLR4 project template"
+plugins {
+    id "com.jfrog.bintray" version "1.4"
+}
+
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 apply plugin: 'idea'
 //apply from: file('gradle/idea.gradle')
 
@@ -41,6 +45,42 @@ task wrapper(type: Wrapper) {
     distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
+/**
+ * https://github.com/bintray/gradle-bintray-plugin
+ */
+bintray {
+    user = 'AndersDJohnson'
+    // Add to "$GRADLE_USER_HOME/gradle.properties"
+    key = project.property('bintray.key')
+    pkg {
+        repo = 'maven'
+        name = project.name
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/AndersDJohnson/brace-expansion-java.git'
+        version {
+            name = project.version
+            released  = new Date()
+            vcsTag = project.version
+        }
+    }
+    publications = ['mavenPublication']
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from components.java
+            groupId 'me.andrz'
+            artifactId project.name
+            version project.version
+            artifacts {
+                archives jar
+                archives sourceJar
+            }
+        }
+    }
+}
+
 idea {
     module {
         sourceDirs += file(antlr.destinationDir)
@@ -54,6 +94,11 @@ idea {
 tasks.withType(Test) {
     systemProperties = System.getProperties()
     testLogging.showStandardStreams = true
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
 }
 
 task antlrOutputDir << {
