@@ -87,7 +87,7 @@ This project provides an [ANTLR][] 4 grammar, [BraceExpansion.g4][].
 ```gradle
 repositories {
     maven {
-        url  "http://dl.bintray.com/AndersDJohnson/maven" 
+        url  "https://dl.bintray.com/AndersDJohnson/maven" 
     }
 }
 
