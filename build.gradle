@@ -1,16 +1,21 @@
-plugins {
-    id "com.jfrog.bintray" version "1.4"
-}
+/**
+ * http://central.sonatype.org/pages/gradle.html
+ */
 
 apply plugin: 'java'
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
 apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
 //apply from: file('gradle/idea.gradle')
 
-sourceCompatibility = 1.6
+sourceCompatibility = 1.5
 group = 'me.andrz'
+
 version = '1.0.0'
 description = 'Brace expansion from Bash/shell in Java.'
+archivesBaseName = "brace-expansion"
 
 ext.versions = [
         slf4j: "1.7.2",
@@ -25,9 +30,6 @@ ext.antlr = [
         antlrSource: 'src/main/antlr',
         destinationDir: "src/generated-sources/java"
 ]
-
-// So CI build doesn't fail, but add to "$GRADLE_USER_HOME/gradle.properties"
-ext['bintray.key'] = null
 
 repositories {
     mavenCentral()
@@ -53,36 +55,65 @@ task wrapper(type: Wrapper) {
     distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
-/**
- * https://github.com/bintray/gradle-bintray-plugin
- */
-bintray {
-    user = 'AndersDJohnson'
-    key = project.property('bintray.key')
-    pkg {
-        repo = 'maven'
-        name = project.name
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/AndersDJohnson/brace-expansion-java.git'
-        version {
-            name = project.version
-            released  = new Date()
-            vcsTag = project.version
-        }
-    }
-    publications = ['mavenPublication']
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
 }
 
-publishing {
-    publications {
-        mavenPublication(MavenPublication) {
-            from components.java
-            groupId 'me.andrz'
-            artifactId project.name
-            version project.version
-            artifacts {
-                archives jar
-                archives sourceJar
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar, javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'brace-expansion'
+                packaging 'jar'
+                artifactId 'brace-expansion'
+                description 'Brace expansion from Bash/shell in Java.'
+                url 'https://github.com/AndersDJohnson/brace-expansion'
+
+                scm {
+                    connection 'scm:git:https://github.com/AndersDJohnson/brace-expansion-java.git'
+                    developerConnection 'scm:git:git@github.com:AndersDJohnson/brace-expansion-java.git'
+                    url 'https://github.com/AndersDJohnson/brace-expansion-java'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'AndersDJohnson'
+                        name 'Anders D. Johnson'
+                        url 'https://andrz.me'
+                        email 'anders.d.johnson.developer@gmail.com'
+                    }
+                }
             }
         }
     }
@@ -101,11 +132,6 @@ idea {
 tasks.withType(Test) {
     systemProperties = System.getProperties()
     testLogging.showStandardStreams = true
-}
-
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
-    classifier "sources"
 }
 
 task antlrOutputDir << {
