@@ -10,7 +10,7 @@ public class CharacterIncrementor extends Incrementor<Character> {
     }
 
     /**
-     * TODO: Will Character.toChars()[0] work with most Unicode? Probably not with high & low surrogate pairs.
+     * TODO: Will Character.toChars()[0] work with most Unicode? Probably not with high and low surrogate pairs.
      */
     @Override
     public void next() {
