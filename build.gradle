@@ -73,8 +73,10 @@ artifacts {
     archives jar, javadocJar, sourcesJar
 }
 
-signing {
-    sign configurations.archives
+if (System.getenv('CI') != 'true') {
+    signing {
+        sign configurations.archives
+    }
 }
 
 uploadArchives {
