@@ -17,6 +17,10 @@ version = '1.0.0'
 description = 'Brace expansion from Bash/shell in Java.'
 archivesBaseName = "brace-expansion"
 
+// Define these so CI build doesn't fail, but add to "$GRADLE_USER_HOME/gradle.properties".
+ext.ossrhUsername = null
+ext.ossrhPassword = null
+
 ext.versions = [
         slf4j: "1.7.2",
         logback: "1.0.9",
