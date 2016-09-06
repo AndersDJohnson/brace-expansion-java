@@ -97,7 +97,7 @@ uploadArchives {
                 packaging 'jar'
                 artifactId 'brace-expansion'
                 description 'Brace expansion from Bash/shell in Java.'
-                url 'https://github.com/AndersDJohnson/brace-expansion'
+                url 'https://github.com/AndersDJohnson/brace-expansion-java'
 
                 scm {
                     connection 'scm:git:https://github.com/AndersDJohnson/brace-expansion-java.git'
