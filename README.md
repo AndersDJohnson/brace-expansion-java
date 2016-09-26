@@ -74,6 +74,10 @@ This project provides an [ANTLR][] 4 grammar, [BraceExpansion.g4][].
 ### Gradle
 
 ```gradle
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile 'me.andrz:brace-expansion:1.0.0'
 }
